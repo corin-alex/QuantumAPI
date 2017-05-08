@@ -12,5 +12,5 @@ See wiki : Soon...
 * Corin ALEXANDRU <corin.alex@gmail.com>
 
 ## License
-&copy; 2017 - Corin ALEXANDRU
+&copy; 2017 - Corin ALEXANDRU  
 MIT
