@@ -28,7 +28,7 @@ final class Errors {
         }
     }
 
-    public static function exceptionManager(\Exception $exception) {
+    public static function exceptionManager($exception) {
         $err = $exception->getMessage() . " | File : " . $exception->getFile() . " | Line : " . $exception->getLine();
         Response::Error(DEBUG ? $err : "An error occurred", 500);
     }
