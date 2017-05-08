@@ -1,0 +1,20 @@
+{
+  "require": {
+    "php"						: ">=7.0.0",
+    "symfony/http-foundation" 	: ">=3.2.7",
+    "symfony/filesystem" 		: ">=3.2.7",
+    "doctrine/orm" 				: ">=2.5.6",
+    "doctrine/cache" 			: ">=1.6.1"
+  },
+  "autoload": {
+    "files": ["Core/Constants.php"],
+    "psr-4": {
+      "QuantumAPI\\Core\\"		: "Core/",
+      "Modules\\"	            : "Modules/",
+      "Entities\\"	            : "Entities/"
+    }
+  },
+  "config": {
+    "vendor-dir": "Libraries"
+  }
+}
