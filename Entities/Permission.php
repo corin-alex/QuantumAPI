@@ -5,12 +5,12 @@ namespace Entities;
 use Doctrine\Mapping as ORM;
 
 /**
- * Permissions
+ * Permission
  *
- * @Table(name="permissions")
+ * @Table(name="qe_permissions")
  * @Entity
  */
-class Permissions
+class Permission
 {
     /**
      * @var integer
@@ -66,9 +66,9 @@ class Permissions
 
     /**
      * @param int $id
-     * @return Permissions
+     * @return Permission
      */
-    public function setId(int $id): Permissions
+    public function setId(int $id): Permission
     {
         $this->id = $id;
         return $this;
@@ -84,9 +84,9 @@ class Permissions
 
     /**
      * @param int $type
-     * @return Permissions
+     * @return Permission
      */
-    public function setType(int $type): Permissions
+    public function setType(int $type): Permission
     {
         $this->type = $type;
         return $this;
@@ -102,9 +102,9 @@ class Permissions
 
     /**
      * @param int $targetId
-     * @return Permissions
+     * @return Permission
      */
-    public function setTargetId(int $targetId): Permissions
+    public function setTargetId(int $targetId): Permission
     {
         $this->targetId = $targetId;
         return $this;
@@ -120,9 +120,9 @@ class Permissions
 
     /**
      * @param string $module
-     * @return Permissions
+     * @return Permission
      */
-    public function setModule(string $module): Permissions
+    public function setModule(string $module): Permission
     {
         $this->module = $module;
         return $this;
@@ -138,9 +138,9 @@ class Permissions
 
     /**
      * @param string $action
-     * @return Permissions
+     * @return Permission
      */
-    public function setAction(string $action): Permissions
+    public function setAction(string $action): Permission
     {
         $this->action = $action;
         return $this;
@@ -156,9 +156,9 @@ class Permissions
 
     /**
      * @param bool $allow
-     * @return Permissions
+     * @return Permission
      */
-    public function setAllow(bool $allow): Permissions
+    public function setAllow(bool $allow): Permission
     {
         $this->allow = $allow;
         return $this;

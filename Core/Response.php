@@ -20,7 +20,7 @@ class Response
      * @param int $code
      * @return void
      */
-    public static function Show($var, int $code = 200){
+    public static function Show($var, int $code = StatusCode::OK){
         header('Content-type: application/json; charset=UTF-8 ');
         http_response_code($code);
         echo json_encode($var);
@@ -44,7 +44,33 @@ class Response
      * @param int $code
      * @return void
      */
-    public static function Error(string $msg, int $code = 400) {
+    public static function Error(string $msg, int $code = StatusCode::BAD_REQUEST) {
         self::Show(["error" => $msg], $code);
+    }
+
+    /**
+     * Render an image from a file
+     *
+     * @param string $path
+     * @return void
+     */
+    public static function Image(string $path) {
+        if (file_exists(UPLOAD_PATH . $path)) {
+            $validTypes = ["image/png", "image/jpeg", "image/gif"];
+            $mime = mime_content_type(UPLOAD_PATH . $path);
+
+            if (!in_array($mime, $validTypes)) {
+                self::Error("Image not valid or corrupted", StatusCode::UNSUPPORTED_MEDIA_TYPE);
+            }
+
+            header("Content-type: $mime; charset=UTF-8");
+
+            http_response_code(StatusCode::OK);
+            echo file_get_contents(UPLOAD_PATH . $path);
+            exit;
+        }
+        else {
+            self::Error("Image not found", StatusCode::NOT_FOUND);
+        }
     }
 }

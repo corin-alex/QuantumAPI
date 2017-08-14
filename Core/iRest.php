@@ -13,8 +13,8 @@ namespace QuantumAPI\Core;
 
 interface iRest
 {
-    function getAction($request);
-    function postAction($request);
-    function putAction($request);
-    function deleteAction($request);
+    function getAction();
+    function setAction();
+    function updateAction();
+    function deleteAction();
 }

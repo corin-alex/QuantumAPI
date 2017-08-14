@@ -77,28 +77,35 @@ abstract class Module implements iModule {
      */
     protected function requestRegisteredUser() {
         $r = Request::createFromGlobals();
-        $sid = $r->query->get("sid");
+        $sid = Session::getSid();
 
-        if (!Session::getInstance()->check($sid)) {
+        if (empty($sid) or !Session::getInstance()->check($sid)) {
             Response::Error("User not logged in", 401);
         }
     }
 
+    public function getUserId() {
+        $r = Request::createFromGlobals();
+        $sid = Session::getSid();
+
+
+        return !empty($sid) ? Session::getInstance()->getUserId($sid) : 0;
+    }
+
     /**
      * Checks if an user has the permission to call an action
-     *
      */
     protected function isAuth() {
         $session =  Session::getInstance();
-        $sid = $session->requestSid();
+        $sid = Session::getSid();
         $uid = 0;
         $utype = 0;
         $em = Database::init();
         if ($session->check($sid)) {
 
-            $user = $em->getRepository("Entities\\Sessions")->findOneById($sid);
+            $user = $em->getRepository("Entities\\Session")->findOneById($sid);
             $uid =  $user->getUserId();
-            $utype = $user->getUserType();
+            //$utype = $user->getUserType();
         }
 
         $allowed = false;
@@ -106,7 +113,7 @@ abstract class Module implements iModule {
         $actionName =  Routing::getActionName();
         if (empty($actionName)) $actionName = "main";
 
-        $auth = $em->getRepository("Entities\\Permissions")->findOneBy(["type" => 1,
+        $auth = $em->getRepository("Entities\\Permission")->findOneBy(["type" => 1,
                                                                                    "targetId" => $uid,
                                                                                    "module" => Routing::getRouteName(),
                                                                                    "action" => $actionName]);
@@ -114,7 +121,7 @@ abstract class Module implements iModule {
             $allowed = $auth->isAllow();
         }
         else {
-            $auth = $em->getRepository("Entities\\Permissions")->findOneBy(["type" => 0,
+            $auth = $em->getRepository("Entities\\Permission")->findOneBy(["type" => 0,
                                                                                        "targetId" => $utype,
                                                                                        "module" => Routing::getRouteName(),
                                                                                        "action" => $actionName]);

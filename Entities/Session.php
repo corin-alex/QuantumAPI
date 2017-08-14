@@ -3,15 +3,19 @@
 namespace Entities;
 
 use Doctrine\Mapping as ORM;
+use QuantumAPI\Core\iArrayable;
+use QuantumAPI\Core\ObjectToArray;
 
 /**
- * Sessions
+ * Session
  *
- * @Table(name="sessions", uniqueConstraints={@UniqueConstraint(name="id", columns={"id"})})
+ * @Table(name="qe_sessions", uniqueConstraints={@UniqueConstraint(name="id", columns={"id"})})
  * @Entity
  */
-class Sessions
+class Session implements iArrayable
 {
+    use ObjectToArray;
+
     /**
      * @var string
      *
@@ -59,9 +63,9 @@ class Sessions
 
     /**
      * @param string $id
-     * @return Sessions
+     * @return Session
      */
-    public function setId(string $id)
+    public function setId(string $id): Session
     {
         $this->id = $id;
         return $this;
@@ -77,9 +81,9 @@ class Sessions
 
     /**
      * @param string $ipAddress
-     * @return Sessions
+     * @return Session
      */
-    public function setIpAddress(string $ipAddress)
+    public function setIpAddress(string $ipAddress): Session
     {
         $this->ipAddress = $ipAddress;
         return $this;
@@ -95,9 +99,9 @@ class Sessions
 
     /**
      * @param string $userAgent
-     * @return Sessions
+     * @return Session
      */
-    public function setUserAgent(string $userAgent)
+    public function setUserAgent(string $userAgent): Session
     {
         $this->userAgent = $userAgent;
         return $this;
@@ -113,9 +117,9 @@ class Sessions
 
     /**
      * @param int $timestamp
-     * @return Sessions
+     * @return Session
      */
-    public function setTimestamp(int $timestamp)
+    public function setTimestamp(int $timestamp): Session
     {
         $this->timestamp = $timestamp;
         return $this;
@@ -131,9 +135,9 @@ class Sessions
 
     /**
      * @param int $userId
-     * @return Sessions
+     * @return Session
      */
-    public function setUserId(int $userId)
+    public function setUserId(int $userId): Session
     {
         $this->userId = $userId;
         return $this;

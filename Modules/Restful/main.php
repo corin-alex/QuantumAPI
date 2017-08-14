@@ -33,23 +33,23 @@ class main extends Module implements iRest{
         $this->redirectFromMethod();
     }
 
-    public function getAction($request){
-        Response::Message("GET action");
+    public function getAction(){
+        Response::Message("Get action");
     }
 
-    public function postAction($request){
-        Response::Message("POST action");
+    public function setAction(){
+        Response::Message("Set action");
     }
 
-    public function putAction($request){
-        Response::Message("PUT action");
+    public function updateAction(){
+        Response::Message("Update action");
     }
 
-    public function deleteAction($request){
-        Response::Message("DELETE action");
+    public function deleteAction(){
+        Response::Message("Delete action");
     }
 
-    public function patchAction($request){
-        Response::Message("DELETE action");
+    public function patchAction(){
+        Response::Message("Patch action");
     }
 }

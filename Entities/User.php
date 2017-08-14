@@ -3,14 +3,18 @@
 namespace Entities;
 
 use Doctrine\Mapping as ORM;
+use QuantumAPI\Core\iArrayable;
 
 /**
- * Users
+ * User
  *
- * @Table(name="users")
+ * @Table(name="qe_users")
  * @Entity
+ * @InheritanceType("JOINED")
+ * @DiscriminatorColumn(name="type", type="string")
+ * @DiscriminatorMap({"user" = "Entities\User"})
  */
-class Users
+class User implements iArrayable
 {
     /**
      * @var integer
@@ -31,30 +35,23 @@ class Users
     /**
      * @var string
      *
-     * @Column(name="password", type="string", length=255, nullable=false)
+     * @Column(name="password", type="string", length=255, nullable=true)
      */
     private $password;
 
     /**
-     * @var integer
-     *
-     * @Column(name="type", type="smallint", nullable=false)
-     */
-    private $type;
-
-    /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
      * @param int $id
-     * @return Users
+     * @return User
      */
-    public function setId(int $id)
+    public function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -63,16 +60,16 @@ class Users
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
 
     /**
      * @param string $email
-     * @return Users
+     * @return User
      */
-    public function setEmail(string $email)
+    public function setEmail($email)
     {
         $this->email = $email;
         return $this;
@@ -81,37 +78,32 @@ class Users
     /**
      * @return string
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return $this->password;
     }
 
     /**
      * @param string $password
-     * @return Users
+     * @return User
      */
-    public function setPassword(string $password)
+    public function setPassword($password)
     {
         $this->password = $password;
         return $this;
     }
 
     /**
-     * @return int
+     * We use manual array conversion to hide some fields
+     *
+     * @return array
      */
-    public function getType(): int
+    public function toArray(): array
     {
-        return $this->type;
-    }
-
-    /**
-     * @param int $type
-     * @return Users
-     */
-    public function setType(int $type)
-    {
-        $this->type = $type;
-        return $this;
+        return [
+          'id' => $this->id,
+          'email' => $this->email,
+        ];
     }
 }
 

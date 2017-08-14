@@ -11,10 +11,12 @@
 
 namespace QuantumAPI;
 
+use QuantumAPI\Core\Database;
 use QuantumAPI\Core\Module;
 use QuantumAPI\Core\Routing;
 use QuantumAPI\Core\Response;
 use QuantumAPI\Core\Session;
+use QuantumAPI\Core\StatusCode;
 
 define('API_START', microtime(true));
 
@@ -27,7 +29,7 @@ require_once 'config.php';
 class Engine {
     public static function start() {
         if (MAINTENANCE) {
-            Response::Error("API under maintenance", 503);
+            Response::Error("API under maintenance", StatusCode::SERVICE_UNAVAILABLE);
         }
 
         // Error Manager
@@ -39,13 +41,13 @@ class Engine {
         // Authorizing all domains to call the API
         header('Access-Control-Allow-Origin: *');
 
-         // Ckecking API Key
-        if (!in_array(Routing::getApiKey(),API_KEY)) {
-            Response::Error("Forbidden", 403);
+        // Ckecking API Key
+        if (API_KEY_CHECK) {
+            $em = Database::init();
+            $key = $em->getRepository("Entities\\ApiKey")->findOneById(Routing::getApiKey());
+            if(empty($key))
+                Response::Error("Forbidden", StatusCode::FORBIDDEN);
         }
-
-        // Session initialization
-        Session::init();
 
         // Detecting module name from route
         $routeName = Routing::getRouteName();
@@ -63,6 +65,6 @@ class Engine {
                 }
             }
         }
-        Response::Error("Requested module doesn't exists or is invalid", 404);
+        Response::Error("Requested module doesn't exists or is invalid", StatusCode::NOT_FOUND);
     }
 }

@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Session {
     private static $_instance = null;
+    private $_sessionId = "";
 
     private function __construct() {}
 
@@ -31,9 +32,14 @@ class Session {
 
     /**
      * Initialize a new session
+     * @deprecated Deprecated
      */
-    public static function init() {
-        session_start();
+    public static function init() {}
+
+    private function generateSessionId($len = 24) {
+        $bytes = random_bytes($len);
+        $this->_sessionId = bin2hex($bytes);
+        return $this->_sessionId;
     }
 
     /**
@@ -43,14 +49,13 @@ class Session {
      * @return string
      */
     public function create(int $userId) : string {
-        session_regenerate_id();
-        $sid = sha1(session_id());
+        $sid = $this->generateSessionId();
 
         $request = Request::createFromGlobals();
         $em = Database::init();
 
-        $session = $em->getRepository("Entities\\Sessions")->findOneBy(["userId" => $userId]);
-        if (empty($session)) $session = new Sessions();
+        $session = $em->getRepository("Entities\\Session")->findOneBy(["userId" => $userId]);
+        if (empty($session)) $session = new \Entities\Session();
         $session->setId($sid);
         $session->setUserId($userId);
         $session->setIpAddress($request->getClientIp());
@@ -77,7 +82,7 @@ class Session {
         $request = Request::createFromGlobals();
         $em = Database::init();
 
-        $session = $em->getRepository("Entities\\Sessions")->findOneById($sid);
+        $session = $em->getRepository("Entities\\Session")->findOneById($sid);
 
         if (empty($session) or
             $session->getUserAgent() != $request->server->get("HTTP_USER_AGENT") or
@@ -88,6 +93,15 @@ class Session {
         return true;
     }
 
+    public function getUserId(string $sid) : int {
+        if(empty($sid)) return 0;
+
+        $em = Database::init();
+        $session = $em->getRepository("Entities\\Session")->findOneById($sid);
+
+        return !empty($session) ? $session->getUserId() : 0;
+    }
+
     /**
      * Destroy a session
      *
@@ -95,15 +109,14 @@ class Session {
      */
     public function clear(string $sid = "") {
         $em = Database::init();
-        if (empty($sid)) $sid = session_id();
-        $session = $em->getRepository("Entities\\Sessions")->findOneById($sid);
+        if (empty($sid)) $sid = $this->_sessionId;
+        $session = $em->getRepository("Entities\\Session")->findOneById($sid);
         if (!empty($session)) {
             $em->remove($session);
             $em->flush();
         }
 
-        session_unset();
-        session_destroy();
+        $this->_sessionId = "";
     }
 
     /**
@@ -111,7 +124,7 @@ class Session {
      *
      * @return string
      */
-    public function requestSid() : string {
+    public static function getSid() : string {
         $r = Request::createFromGlobals();
         $sidGet = $r->query->get("sid");
         $sidPost = $r->request->get("sid");
@@ -129,7 +142,7 @@ class Session {
         }
         else {
             return $sidGet;
-            //return ($sidGet == $sidPost) ? $sidGet : "INVALID";;
+            //return ($sidGet == $sidPost) ? $sidGet : "NOT_VALID";
         }
 
     }

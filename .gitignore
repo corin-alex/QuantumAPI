@@ -5,3 +5,4 @@
 !Runtime/Cache/.gitkeep
 /Runtime/Temp/*
 !Runtime/Temp/.gitkeep
+/config.php
