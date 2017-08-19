@@ -39,10 +39,10 @@ abstract class Module implements iModule {
                 $this->getAction(null);
                 break;
             case 'POST':
-                $this->postAction();
+                $this->createAction();
                 break;
             case 'PUT':
-                $this->putAction();
+                $this->updateAction();
                 break;
             case 'DELETE':
                 $this->deleteAction();

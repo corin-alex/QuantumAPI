@@ -14,7 +14,7 @@ namespace QuantumAPI\Core;
 interface iRest
 {
     function getAction();
-    function setAction();
+    function createAction();
     function updateAction();
     function deleteAction();
 }

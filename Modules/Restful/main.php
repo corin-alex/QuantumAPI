@@ -37,7 +37,7 @@ class main extends Module implements iRest{
         Response::Message("Get action");
     }
 
-    public function setAction(){
+    public function createAction(){
         Response::Message("Set action");
     }
 
